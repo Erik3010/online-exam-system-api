@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class StudentEssayAnswer extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function question()
+    {
+        return $this->belongsTo(EssayQuestion::class, 'essay_question_id');
+    }
 }

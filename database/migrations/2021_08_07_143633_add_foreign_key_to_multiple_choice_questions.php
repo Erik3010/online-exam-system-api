@@ -26,7 +26,7 @@ class AddForeignKeyToMultipleChoiceQuestions extends Migration
     public function down()
     {
         Schema::table('multiple_choice_questions', function (Blueprint $table) {
-            //
+            $table->dropForeign('correct_answer_id');
         });
     }
 }

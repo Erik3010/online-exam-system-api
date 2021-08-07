@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
+use App\Response\Response;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
@@ -18,16 +19,6 @@ class ExamController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -35,7 +26,7 @@ class ExamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return Response::success("yey");
     }
 
     /**
@@ -45,17 +36,6 @@ class ExamController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Exam $exam)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Exam  $exam
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Exam $exam)
     {
         //
     }

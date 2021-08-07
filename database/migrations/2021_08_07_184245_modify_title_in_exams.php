@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignKeyToMultipleChoiceOptions extends Migration
+class ModifyTitleInExams extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddForeignKeyToMultipleChoiceOptions extends Migration
      */
     public function up()
     {
-        Schema::table('multiple_choice_options', function (Blueprint $table) {
-            $table->foreign('multiple_choice_id')->references('id')->on('multiple_choice_questions');
+        Schema::table('exams', function (Blueprint $table) {
+            $table->string('title')->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AddForeignKeyToMultipleChoiceOptions extends Migration
      */
     public function down()
     {
-        Schema::table('multiple_choice_options', function (Blueprint $table) {
-            $table->dropForeign('multiple_choice_id');
+        Schema::table('exams', function (Blueprint $table) {
+            //
         });
     }
 }
