@@ -20,4 +20,14 @@ class Exam extends Model
     {
         return $this->belongsTo(Classroom::class);
     }
+
+    public function essay()
+    {
+        return $this->hasMany(EssayQuestion::class);
+    }
+
+    public function multipleChoice()
+    {
+        return $this->hasMany(MultipleChoiceQuestion::class);
+    }
 }

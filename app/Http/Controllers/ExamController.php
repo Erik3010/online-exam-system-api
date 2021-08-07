@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Exam;
 use App\Response\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ExamController extends Controller
 {
@@ -26,7 +28,22 @@ class ExamController extends Controller
      */
     public function store(Request $request)
     {
-        return Response::success("yey");
+        $validator = Validator::make($request->all(), [
+            'title' => ['required'],
+            'classroom_id' => ['required', 'exists:classrooms,id'],
+            'start' => ['required', 'date_format:Y-m-d H:i'],
+            'end' => ['required', 'date_format:Y-m-d H:i', 'after:start'],
+        ]);
+
+        if ($validator->fails())
+            return Response::invalidField();
+
+        $params = $request->only(['title', 'classroom_id', 'start', 'end']);
+        $params['created_by'] = Auth::user()->teacher_id;
+
+        Exam::create($params);
+
+        return Response::success('exam created successfully');
     }
 
     /**

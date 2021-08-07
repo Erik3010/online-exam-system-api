@@ -24,7 +24,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('reset-password', [AuthController::class, 'reset']);
 
         Route::group(['middleware' => 'teacher'], function () {
-            Route::resource('exam', ExamController::class);
+            Route::resource('exam', ExamController::class)->only(['store']);
         });
     });
 });
