@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EssayQuestionController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\MultipleChoiceQuestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,8 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['middleware' => 'teacher'], function () {
             Route::resource('exam', ExamController::class)->only(['store']);
+            Route::resource('exam/{exam}/multiple-choice', MultipleChoiceQuestionController::class)->only(['store']);
+            Route::resource('exam/{exam}/essay', EssayQuestionController::class)->only(['store']);
         });
     });
 });

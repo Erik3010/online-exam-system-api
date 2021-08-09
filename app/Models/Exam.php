@@ -30,4 +30,34 @@ class Exam extends Model
     {
         return $this->hasMany(MultipleChoiceQuestion::class);
     }
+
+    public function essayAnswer()
+    {
+        return $this->hasManyThrough(StudentEssayAnswer::class, EssayQuestion::class);
+    }
+
+    public function historyEssayAnswer()
+    {
+        return $this->hasManyThrough(HistoryStudentEssayAnswer::class, EssayQuestion::class);
+    }
+
+    public function multipleChoiceAnswer()
+    {
+        return $this->hasManyThrough(
+            StudentMultipleChoiceAnswer::class,
+            MultipleChoiceQuestion::class,
+            'exam_id',
+            'question_id'
+        );
+    }
+
+    public function historyMultipleChoiceAnswer()
+    {
+        return $this->hasManyThrough(
+            HistoryStudentMultipleChoiceAnswer::class,
+            MultipleChoiceQuestion::class,
+            'exam_id',
+            'question_id'
+        );
+    }
 }
