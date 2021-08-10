@@ -26,9 +26,9 @@ class Exam extends Model
         return $this->hasMany(EssayQuestion::class);
     }
 
-    public function multipleChoice()
+    public function essayKeywords()
     {
-        return $this->hasMany(MultipleChoiceQuestion::class);
+        return $this->hasManyThrough(EssayKeyword::class, EssayQuestion::class, 'exam_id', 'essay_id');
     }
 
     public function essayAnswer()
@@ -39,6 +39,21 @@ class Exam extends Model
     public function historyEssayAnswer()
     {
         return $this->hasManyThrough(HistoryStudentEssayAnswer::class, EssayQuestion::class);
+    }
+
+    public function multipleChoice()
+    {
+        return $this->hasMany(MultipleChoiceQuestion::class);
+    }
+
+    public function multipleChoiceOption()
+    {
+        return $this->hasManyThrough(
+            MultipleChoiceOption::class,
+            MultipleChoiceQuestion::class,
+            'exam_id',
+            'multiple_choice_id'
+        );
     }
 
     public function multipleChoiceAnswer()

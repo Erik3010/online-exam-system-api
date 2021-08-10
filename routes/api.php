@@ -25,7 +25,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('reset-password', [AuthController::class, 'reset']);
 
         Route::group(['middleware' => 'teacher'], function () {
-            Route::resource('exam', ExamController::class)->only(['store']);
+            Route::resource('exam', ExamController::class)->only(['store', 'destroy']);
             Route::resource('exam/{exam}/multiple-choice', MultipleChoiceQuestionController::class)->only(['store']);
             Route::resource('exam/{exam}/essay', EssayQuestionController::class)->only(['store']);
         });

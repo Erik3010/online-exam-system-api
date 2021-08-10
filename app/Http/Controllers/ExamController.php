@@ -6,6 +6,7 @@ use App\Models\Exam;
 use App\Response\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ExamController extends Controller
@@ -77,6 +78,28 @@ class ExamController extends Controller
      */
     public function destroy(Exam $exam)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $exam->historyEssayAnswer()->delete();
+            $exam->essayAnswer()->delete();
+            $exam->essayKeywords()->delete();
+            $exam->essay()->delete();
+
+            $exam->historyMultipleChoiceAnswer()->delete();
+            $exam->multipleChoiceAnswer()->delete();
+            $exam->multipleChoiceOption()->delete();
+            $exam->multipleChoice()->delete();
+
+            $exam->delete();
+
+            DB::commit();
+
+            return Response::success('Exam deleted successfully');
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return Response::error($e->getMessage());
+        }
     }
 }

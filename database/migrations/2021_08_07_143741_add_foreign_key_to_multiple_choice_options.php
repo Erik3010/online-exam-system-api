@@ -14,7 +14,7 @@ class AddForeignKeyToMultipleChoiceOptions extends Migration
     public function up()
     {
         Schema::table('multiple_choice_options', function (Blueprint $table) {
-            $table->foreign('multiple_choice_id')->references('id')->on('multiple_choice_questions');
+            $table->foreign('multiple_choice_id')->references('id')->on('multiple_choice_questions')->onDelete('cascade');
         });
     }
 
@@ -26,7 +26,7 @@ class AddForeignKeyToMultipleChoiceOptions extends Migration
     public function down()
     {
         Schema::table('multiple_choice_options', function (Blueprint $table) {
-            $table->dropForeign('multiple_choice_id');
+            $table->dropForeign(['multiple_choice_id']);
         });
     }
 }
