@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EssayQuestion;
 use App\Models\Exam;
+use App\Models\ExamResult;
 use App\Models\Student;
 use App\Response\Response;
 use Illuminate\Http\Request;
@@ -141,5 +143,37 @@ class ExamController extends Controller
         ]);
 
         return Response::withData($exam);
+    }
+
+    public function processExamResult(Exam $exam, Student $student, Request $request)
+    {
+        $multipleChoice = $exam->multipleChoice()->with(['studentAnswer' => function ($query) use ($student) {
+            $query->where('student_id', $student->id);
+        }])->get();
+
+        $multipleChoiceScore = $multipleChoice->reduce(function ($total, $item) {
+            $currentScore = ($item->correct_answer_id === ($item->studentAnswer->option_id ?? null))
+                ? $item->weight
+                : 0;
+
+            return $total + $currentScore;
+        }, 0);
+
+        $essayScore = collect($request->essay_result)->reduce(function ($total, $item) {
+            $essay = EssayQuestion::find($item['question_id']);
+
+            if ($item['score'] > $essay->weight)
+                return Response::error("Essay question with id {$item['question_id']} has score more than question the weight", 422);
+
+            return $total + $item['score'];
+        }, 0);
+
+        $score = (($multipleChoiceScore + $essayScore) / 2);
+        $examResult = ExamResult::updateOrCreate(
+            ['exam_id' => $exam->id, 'student_id' => $student->id],
+            ['score' => $score]
+        );
+
+        return Response::withData($examResult);
     }
 }

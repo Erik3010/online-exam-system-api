@@ -30,6 +30,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::resource('exam/{exam}/multiple-choice', MultipleChoiceQuestionController::class)->only(['store']);
             Route::resource('exam/{exam}/essay', EssayQuestionController::class)->only(['store']);
             Route::get('exam/{exam}/student/{student}/answer', [ExamController::class, 'studentAnswer']);
+            Route::post('exam/{exam}/student/{student}/assess', [ExamController::class, 'processExamResult']);
         });
     });
 });
