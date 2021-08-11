@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EssayQuestionController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\MultipleChoiceQuestionController;
+use App\Http\Controllers\StudentMultipleChoiceAnswerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,10 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('reset-password', [AuthController::class, 'reset']);
 
         Route::group(['middleware' => 'teacher'], function () {
-            Route::resource('exam', ExamController::class)->only(['store', 'destroy']);
+            Route::resource('exam', ExamController::class)->only(['index', 'show', 'store', 'destroy']);
             Route::resource('exam/{exam}/multiple-choice', MultipleChoiceQuestionController::class)->only(['store']);
             Route::resource('exam/{exam}/essay', EssayQuestionController::class)->only(['store']);
+            Route::get('exam/{exam}/student/{student}/answer', [ExamController::class, 'studentAnswer']);
         });
     });
 });

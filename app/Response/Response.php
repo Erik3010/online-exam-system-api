@@ -30,11 +30,14 @@ class Response
         return static::error('invalid field', 422);
     }
 
-    public static function withData($message, $data)
+    public static function withData($data, $message = null)
     {
-        return response()->json([
-            'message' => $message,
+        $response = [
             'data' => $data,
-        ]);
+            'message' => $message,
+        ];
+        if (!$message) unset($response['message']);
+
+        return response()->json($response);
     }
 }

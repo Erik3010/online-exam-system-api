@@ -23,7 +23,7 @@ class MultipleChoiceQuestion extends Model
 
     public function choices()
     {
-        return $this->hasMany(MultipleChoiceOption::class, 'multiple_choice_Id');
+        return $this->hasMany(MultipleChoiceOption::class, 'multiple_choice_id');
     }
 
     public function studentAnswer()

@@ -5,20 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class HistoryStudentMultipleChoiceAnswer extends Model
+class ExamResult extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    public function question()
+    public function exam()
     {
-        return $this->belongsTo(MultipleChoiceQuestion::class, 'question_id');
-    }
-
-    public function choice()
-    {
-        return $this->belongsTo(MultipleChoiceQuestion::class, 'option_id');
+        return $this->belongsTo(Exam::class);
     }
 
     public function student()

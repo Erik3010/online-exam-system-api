@@ -32,7 +32,7 @@ class AuthController extends Controller
             'ip_address' => $request->ip(),
         ]);
 
-        return Response::withData('successfully login', Auth::user());
+        return Response::withData(Auth::user(), 'successfully login');
     }
 
     public function logout(Request $request)
@@ -44,7 +44,7 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        return Response::withData('success', Auth::user());
+        return Response::withData(Auth::user());
     }
 
     public function reset(Request $request)

@@ -11,6 +11,13 @@ class Exam extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['can_assess'];
+
+    public function getCanAssessAttribute()
+    {
+        return now()->isAfter($this->end);
+    }
+
     public function creator()
     {
         return $this->belongsTo(Teacher::class, 'created_by');
@@ -74,5 +81,10 @@ class Exam extends Model
             'exam_id',
             'question_id'
         );
+    }
+
+    public function examResult()
+    {
+        return $this->hasMany(ExamResult::class);
     }
 }

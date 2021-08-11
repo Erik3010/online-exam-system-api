@@ -20,4 +20,14 @@ class Student extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function allExamResult()
+    {
+        return $this->hasMany(ExamResult::class);
+    }
+
+    public function examResult()
+    {
+        return $this->hasOne(ExamResult::class);
+    }
 }

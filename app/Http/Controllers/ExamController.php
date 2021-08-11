@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
+use App\Models\Student;
 use App\Response\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +20,11 @@ class ExamController extends Controller
      */
     public function index()
     {
-        //
+        $exams = Exam::where('created_by', Auth::user()->teacher_id)
+            ->with('classroom')
+            ->get();
+
+        return Response::withData($exams);
     }
 
     /**
@@ -55,7 +61,24 @@ class ExamController extends Controller
      */
     public function show(Exam $exam)
     {
-        //
+        $essayStudent = $exam->essayAnswer()
+            ->groupBy('student_id')
+            ->pluck('student_id');
+
+        $multipleChoiceStudent = $exam->multipleChoiceAnswer()
+            ->groupBy('student_id')
+            ->whereNotIn('student_id', $essayStudent)
+            ->pluck('student_id');
+
+        $participatedStudent = $essayStudent->merge($multipleChoiceStudent);
+
+        $students = Student::whereIn('id', $participatedStudent)
+            ->with(['examResult' => function ($query) use ($exam) {
+                $query->where('exam_id', $exam->id);
+            }])
+            ->get();
+
+        return Response::withData($students);
     }
 
     /**
@@ -90,6 +113,7 @@ class ExamController extends Controller
             $exam->multipleChoiceAnswer()->delete();
             $exam->multipleChoiceOption()->delete();
             $exam->multipleChoice()->delete();
+            $exam->examResult()->delete();
 
             $exam->delete();
 
@@ -101,5 +125,21 @@ class ExamController extends Controller
 
             return Response::error($e->getMessage());
         }
+    }
+
+    public function studentAnswer(Exam $exam, Student $student)
+    {
+        $exam->load([
+            'essay.keywords',
+            'essay.answer' => function ($query) use ($student) {
+                $query->where('student_id', $student->id);
+            },
+            'multipleChoice.choices',
+            'multipleChoice.studentAnswer' => function ($query) use ($student) {
+                $query->where('student_id', $student->id);
+            },
+        ]);
+
+        return Response::withData($exam);
     }
 }

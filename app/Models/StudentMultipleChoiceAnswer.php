@@ -20,4 +20,9 @@ class StudentMultipleChoiceAnswer extends Model
     {
         return $this->belongsTo(MultipleChoiceQuestion::class, 'option_id');
     }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
 }
