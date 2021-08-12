@@ -29,8 +29,15 @@ Route::group(['prefix' => 'v1'], function () {
             Route::resource('exam', ExamController::class)->only(['index', 'show', 'store', 'destroy']);
             Route::resource('exam/{exam}/multiple-choice', MultipleChoiceQuestionController::class)->only(['store']);
             Route::resource('exam/{exam}/essay', EssayQuestionController::class)->only(['store']);
+
             Route::get('exam/{exam}/student/{student}/answer', [ExamController::class, 'studentAnswer']);
             Route::post('exam/{exam}/student/{student}/assess', [ExamController::class, 'processExamResult']);
+        });
+
+        Route::group(['middleware' => 'student'], function () {
+            Route::get('exam-by-class', [ExamController::class, 'examByClass']);
+            Route::get('exam/{exam}/questions', [ExamController::class, 'examQuestions']);
+            Route::post('exam/{exam}/submit-answer', [ExamController::class, 'submitAnswer']);
         });
     });
 });

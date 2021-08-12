@@ -11,11 +11,21 @@ class Exam extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['can_assess'];
+    protected $appends = ['can_assess', 'is_exam_available'];
+
+    protected $dates = [
+        'start',
+        'end'
+    ];
 
     public function getCanAssessAttribute()
     {
         return now()->isAfter($this->end);
+    }
+
+    public function getIsExamAvailableAttribute()
+    {
+        return now()->between($this->start, $this->end);
     }
 
     public function creator()

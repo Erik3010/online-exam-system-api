@@ -40,4 +40,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(LoginLog::class);
     }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
 }
