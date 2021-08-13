@@ -5,18 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EssayQuestionController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\MultipleChoiceQuestionController;
-use App\Http\Controllers\StudentMultipleChoiceAnswerController;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\StatisticController;
 
 Route::group(['prefix' => 'v1'], function () {
     Route::post('login', [AuthController::class, 'login']);
@@ -38,6 +28,10 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('exam-by-class', [ExamController::class, 'examByClass']);
             Route::get('exam/{exam}/questions', [ExamController::class, 'examQuestions']);
             Route::post('exam/{exam}/submit-answer', [ExamController::class, 'submitAnswer']);
+
+            Route::get('score', [ScoreController::class, 'index']);
+
+            Route::get('statistic', [StatisticController::class, 'index']);
         });
     });
 });

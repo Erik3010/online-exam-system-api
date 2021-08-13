@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Exam extends Model
 {
@@ -96,5 +97,20 @@ class Exam extends Model
     public function examResult()
     {
         return $this->hasMany(ExamResult::class);
+    }
+
+    public function studentExamResult()
+    {
+        return $this->hasOne(ExamResult::class)->where('student_id', Auth::user()->student_id);
+    }
+
+    public function maxScore()
+    {
+        return $this->hasOne(ExamResult::class)->orderBy('score', 'DESC');
+    }
+
+    public function minScore()
+    {
+        return $this->hasOne(ExamResult::class)->orderBy('score', 'ASC');
     }
 }
