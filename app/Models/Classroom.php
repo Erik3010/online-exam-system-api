@@ -18,4 +18,9 @@ class Classroom extends Model
     {
         return $this->hasMany(Exam::class);
     }
+
+    public function examResult()
+    {
+        return $this->hasManyThrough(ExamResult::class, Exam::class);
+    }
 }

@@ -18,17 +18,42 @@ class StatisticController extends Controller
             'exam_id',
             DB::raw('MAX(score) AS max_score'),
             DB::raw('MIN(score) AS min_score'),
-            DB::raw('ROUND(AVG(score)) AS avg_score')
+            DB::raw('ROUND(AVG(CAST(score AS float)), 2) AS avg_score')
         ])
             ->with('exam')
             ->groupBy('exam_id')
             ->get();
 
-        $studentStatistic = Classroom::with(['exams' => function ($query) {
-            $query->with(['minScore', 'maxScore']);
-        }])
+        $studentStatistic = Classroom::has('exams')
+            ->with(['examResult' => function ($query) {
+                $query->select([
+                    DB::raw('ROUND(AVG(CAST(score AS float)), 2) AS avg_score')
+                ])->groupBy('student_id');
+            }])
+            ->get()
+            ->map(function ($item) {
+                $item->min_score = (float) $item->examResult->min('avg_score');
+                $item->max_score = (float) $item->examResult->max('avg_score');
+
+                return $item;
+            });
+
+        $studentAvg = ExamResult::select([
+            DB::raw('AVG(score) AS avg_score'),
+        ])
+            ->groupBy('student_id')
             ->get();
 
-        return $studentStatistic;
+        $allStudentStatistic = [
+            'avg' => (float) $studentAvg->avg('avg_score'),
+            'min_score' => (float) $studentAvg->min('avg_score'),
+            'max_score' => (float) $studentAvg->max('avg_score')
+        ];
+
+        return Response::withData([
+            'exam_statistic' => $examStatistic,
+            'student_statistic' => $studentStatistic,
+            'all_student_statistic' => $allStudentStatistic
+        ]);
     }
 }

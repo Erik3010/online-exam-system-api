@@ -103,14 +103,4 @@ class Exam extends Model
     {
         return $this->hasOne(ExamResult::class)->where('student_id', Auth::user()->student_id);
     }
-
-    public function maxScore()
-    {
-        return $this->hasOne(ExamResult::class)->orderBy('score', 'DESC');
-    }
-
-    public function minScore()
-    {
-        return $this->hasOne(ExamResult::class)->orderBy('score', 'ASC');
-    }
 }
