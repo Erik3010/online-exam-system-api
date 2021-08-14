@@ -32,6 +32,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('score', [ScoreController::class, 'index']);
 
             Route::get('statistic', [StatisticController::class, 'index']);
+            Route::get('statistic/detail', [StatisticController::class, 'show']);
         });
     });
 });

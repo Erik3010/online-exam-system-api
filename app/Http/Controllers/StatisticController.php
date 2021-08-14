@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Classroom;
 use App\Models\Exam;
+use App\Models\Student;
+use App\Models\Classroom;
 use App\Models\ExamResult;
 use App\Response\Response;
 use Illuminate\Http\Request;
@@ -55,5 +56,26 @@ class StatisticController extends Controller
             'student_statistic' => $studentStatistic,
             'all_student_statistic' => $allStudentStatistic
         ]);
+    }
+
+    public function show(Request $request)
+    {
+        if ($request->filled('classroom_id'))
+            $student_ids = Classroom::find($request->classroom_id)->students()->pluck('id');
+        else
+            $student_ids = Student::pluck('id');
+
+        $studentsResult = ExamResult::whereIn('student_id', $student_ids)
+            ->with('student')
+            ->groupBy('student_id')
+            ->select([
+                'id',
+                'student_id',
+                DB::raw("ROUND(AVG(CAST(score AS float)),2) AS avg_score")
+            ])
+            ->orderBy('avg_score', 'DESC')
+            ->get();
+
+        return Response::withData($studentsResult);
     }
 }
