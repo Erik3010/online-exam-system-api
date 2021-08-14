@@ -36,11 +36,13 @@ class MultipleChoiceQuestionController extends Controller
             'correct_answer_id' => ['required', 'integer', 'between:0,4'],
         ]);
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             return Response::invalidField();
+        }
 
-        if ($exam->multipleChoice()->sum("weight") + $request->weight > 100)
+        if ($exam->multipleChoice()->sum("weight") + $request->weight > 100) {
             return Response::error("Exam total weight exceed");
+        }
 
         $params = $request->only(['question', 'weight']);
         $params['exam_id'] = $exam->id;

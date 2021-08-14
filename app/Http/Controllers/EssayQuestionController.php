@@ -44,11 +44,13 @@ class EssayQuestionController extends Controller
             'weight' => ['required']
         ]);
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             return Response::invalidField();
+        }
 
-        if ($exam->essay()->sum('weight') + $request->weight > 100)
+        if ($exam->essay()->sum('weight') + $request->weight > 100) {
             return Response::error('Exam total weight exceed');
+        }
 
         $params = $request->only(['question', 'weight']);
         $params['exam_id'] = $exam->id;

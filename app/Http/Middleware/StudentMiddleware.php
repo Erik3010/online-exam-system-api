@@ -18,8 +18,9 @@ class StudentMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::user()->student_id)
+        if (!Auth::user()->student_id) {
             return Response::unauthorized();
+        }
 
         return $next($request);
     }

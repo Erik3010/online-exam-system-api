@@ -17,13 +17,15 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             return Response::invalidField();
+        }
 
         $credentials = $request->only(['username', 'password']);
 
-        if (!Auth::attempt($credentials))
+        if (!Auth::attempt($credentials)) {
             return Response::error('invalid credentials', 401);
+        }
 
         Auth::user()->update(['token' => md5(Auth::id())]);
 
@@ -55,19 +57,22 @@ class AuthController extends Controller
             'new_confirm_password' => ['required'],
         ]);
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             return Response::invalidField();
+        }
 
-        if ($request->new_password !== $request->new_confirm_password)
+        if ($request->new_password !== $request->new_confirm_password) {
             return Response::error('password not match', 422);
+        }
 
         $credentials = [
             'username' => Auth::user()->username,
             'password' => $request->old_password
         ];
 
-        if (!Auth::attempt($credentials))
+        if (!Auth::attempt($credentials)) {
             return Response::error('you enter wrong password', 422);
+        }
 
         Auth::user()->update(['password' => bcrypt($request->new_password)]);
 

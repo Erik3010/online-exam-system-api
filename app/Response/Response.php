@@ -36,7 +36,9 @@ class Response
             'data' => $data,
             'message' => $message,
         ];
-        if (!$message) unset($response['message']);
+        if (!$message) {
+            unset($response['message']);
+        }
 
         return response()->json($response);
     }

@@ -19,8 +19,9 @@ class TeacherMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::user()->teacher_id)
+        if (!Auth::user()->teacher_id) {
             return Response::unauthorized();
+        }
 
         return $next($request);
     }

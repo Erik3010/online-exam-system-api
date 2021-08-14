@@ -60,10 +60,11 @@ class StatisticController extends Controller
 
     public function show(Request $request)
     {
-        if ($request->filled('classroom_id'))
+        if ($request->filled('classroom_id')) {
             $student_ids = Classroom::find($request->classroom_id)->students()->pluck('id');
-        else
+        } else {
             $student_ids = Student::pluck('id');
+        }
 
         $studentsResult = ExamResult::whereIn('student_id', $student_ids)
             ->with('student')

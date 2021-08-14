@@ -37,8 +37,9 @@ class ExamController extends Controller
             'end' => ['required', 'date_format:Y-m-d H:i', 'after:start'],
         ]);
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             return Response::invalidField();
+        }
 
         $params = $request->only(['title', 'classroom_id', 'start', 'end']);
         $params['created_by'] = Auth::user()->teacher_id;
@@ -136,8 +137,9 @@ class ExamController extends Controller
         $essayScore = collect($request->essay_result)->reduce(function ($total, $item) {
             $essay = EssayQuestion::find($item['question_id']);
 
-            if ($item['score'] > $essay->weight)
+            if ($item['score'] > $essay->weight) {
                 return Response::error("Essay question with id {$item['question_id']} has score more than question the weight", 422);
+            }
 
             return $total + $item['score'];
         }, 0);

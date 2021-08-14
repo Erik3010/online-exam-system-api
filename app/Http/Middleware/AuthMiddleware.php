@@ -22,8 +22,9 @@ class AuthMiddleware
     {
         $user = User::where('token', $request->token)->first();
 
-        if (!$request->token || !$user)
+        if (!$request->token || !$user) {
             return Response::unauthorized();
+        }
 
         Auth::login($user);
 
