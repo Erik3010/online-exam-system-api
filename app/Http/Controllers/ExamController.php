@@ -71,11 +71,6 @@ class ExamController extends Controller
         return Response::withData($students);
     }
 
-    public function update(Request $request, Exam $exam)
-    {
-        //
-    }
-
     public function destroy(Exam $exam)
     {
         DB::beginTransaction();
