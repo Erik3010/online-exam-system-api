@@ -22,6 +22,9 @@ Route::group(['prefix' => 'v1'], function () {
 
             Route::get('exam/{exam}/student/{student}/answer', [ExamController::class, 'studentAnswer']);
             Route::post('exam/{exam}/student/{student}/assess', [ExamController::class, 'processExamResult']);
+
+            Route::get('statistic', [StatisticController::class, 'index']);
+            Route::get('statistic/detail', [StatisticController::class, 'show']);
         });
 
         Route::group(['middleware' => 'student'], function () {
@@ -30,9 +33,6 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('exam/{exam}/submit-answer', [ExamController::class, 'submitAnswer']);
 
             Route::get('score', [ScoreController::class, 'index']);
-
-            Route::get('statistic', [StatisticController::class, 'index']);
-            Route::get('statistic/detail', [StatisticController::class, 'show']);
         });
     });
 });
