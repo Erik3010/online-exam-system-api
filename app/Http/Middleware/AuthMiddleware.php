@@ -20,9 +20,13 @@ class AuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if (!$request->token) {
+            return Response::unauthorized();
+        }
+        
         $user = User::where('token', $request->token)->first();
 
-        if (!$request->token || !$user) {
+        if (!$user) {
             return Response::unauthorized();
         }
 
